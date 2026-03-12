@@ -19,7 +19,6 @@ class QueryPayload(BaseModel):
 
 
 class RefineRequest(BaseModel):
-    thread_id: str
     message: str
     base_query: Optional[QueryPayload] = None
     history: list[dict[str, Any]] = Field(default_factory=list)

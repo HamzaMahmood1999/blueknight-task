@@ -97,7 +97,6 @@ criterion. A candidate who always exits after one iteration has not met this req
 
 | Field            | Type                  | Notes                             |
 | ---------------- | --------------------- | --------------------------------- |
-| `thread_id`      | `str`                 |                                   |
 | `message`        | `str`                 | the user's natural language query |
 | `base_query`     | `QueryPayload | null` | optional prior structured query   |
 | `history`        | `list[dict]`          | prior turns in the session        |
@@ -203,7 +202,6 @@ logs alone
 ```json
 // Request
 {
-  "thread_id": "abc-123",
   "message": "industrial software providers for warehouse operations in UK",
   "base_query": null,
   "history": [],
