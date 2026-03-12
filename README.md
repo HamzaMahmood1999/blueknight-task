@@ -294,6 +294,15 @@ logs alone
 
 ---
 
+## Submission (Fork Required)
+
+1. Fork this repository to your own GitHub account.
+2. Complete the task in your fork.
+3. Commit your changes with clear messages.
+4. Share your fork URL (and branch name if not `main`) for review.
+
+---
+
 ## Deliverables
 
 - Working API for both subtasks
