@@ -2,8 +2,6 @@ fastapi
 uvicorn
 pydantic
 httpx
-pytest
-pytest-asyncio
 
 # Candidate picks one vector option and adds it:
 # qdrant-client

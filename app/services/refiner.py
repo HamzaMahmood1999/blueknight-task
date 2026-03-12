@@ -7,7 +7,7 @@ class QueryRefinerAgent:
     """
     Placeholder for Subtask 1.
 
-    TODO(candidate):
+    TODO:
     - consume user intent + history
     - produce strict JSON response
     - normalize refined query against default payload

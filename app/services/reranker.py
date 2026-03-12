@@ -5,7 +5,7 @@ class Reranker:
     """
     Placeholder re-ranker.
 
-    TODO(candidate):
+    TODO:
     - implement deterministic rerank over candidate set
     - expose score components for diagnostics
     """

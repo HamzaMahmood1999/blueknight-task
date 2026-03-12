@@ -7,7 +7,7 @@ def parse_json_contract(raw: str) -> dict[str, Any]:
     """
     Placeholder parser for LLM outputs.
 
-    TODO(candidate):
+    TODO:
     - robustly parse JSON from raw content
     - handle fenced code blocks
     - return deterministic error shape on failure

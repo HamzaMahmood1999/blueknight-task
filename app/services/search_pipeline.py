@@ -7,7 +7,7 @@ class SearchPipeline:
     """
     Placeholder for Subtask 2.
 
-    TODO(candidate):
+    TODO:
     - vector recall
     - metadata post-filtering
     - reranking
