@@ -1,0 +1,66 @@
+from __future__ import annotations
+
+from typing import Any, Optional
+
+from pydantic import BaseModel, Field
+
+
+class Action(BaseModel):
+    id: str
+    label: str
+    payload: dict[str, Any] = Field(default_factory=dict)
+
+
+class QueryPayload(BaseModel):
+    query_text: str = ""
+    industry: list[str] = Field(default_factory=list)
+    customer_type: list[str] = Field(default_factory=list)
+    geography: list[str] = Field(default_factory=list)
+    min_revenue: float = 0
+    max_revenue: float = 0
+    offering_weight: float = 0
+    customer_weight: float = 0
+    problem_weight: float = 0
+    use_case_weight: float = 0
+
+
+class RefineRequest(BaseModel):
+    thread_id: str
+    message: str
+    base_query: Optional[QueryPayload] = None
+    history: list[dict[str, Any]] = Field(default_factory=list)
+
+
+class RefineResponse(BaseModel):
+    refined_query: QueryPayload
+    rationale: str
+    actions: list[Action] = Field(default_factory=list)
+    meta: dict[str, Any] = Field(default_factory=dict)
+
+
+class SearchRequest(BaseModel):
+    query: QueryPayload
+    top_k_raw: int = 5000
+    top_k_final: int = 100
+    offset: int = 0
+
+
+class SearchResult(BaseModel):
+    id: str
+    score: float
+    metadata: dict[str, Any] = Field(default_factory=dict)
+
+
+class Diagnostics(BaseModel):
+    raw_count: int = 0
+    filtered_count: int = 0
+    reranked_count: int = 0
+    dropped: dict[str, int] = Field(default_factory=dict)
+    timings_ms: dict[str, float] = Field(default_factory=dict)
+
+
+class SearchResponse(BaseModel):
+    results: list[SearchResult] = Field(default_factory=list)
+    total: int = 0
+    diagnostics: Diagnostics = Field(default_factory=Diagnostics)
+
