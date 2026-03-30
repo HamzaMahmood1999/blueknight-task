@@ -3,9 +3,21 @@ uvicorn
 pydantic
 httpx
 
-# Candidate picks one vector option and adds it:
-# qdrant-client
-# pinecone
-# faiss-cpu
-# sqlalchemy + pgvector
+# Groq - LLM for query refinement
+groq
 
+# Local embeddings (no API needed)
+sentence-transformers
+
+# Vector DB
+faiss-cpu
+numpy
+
+# Data ingestion
+pandas
+
+# Retry logic
+tenacity
+
+# Environment variable loading
+python-dotenv

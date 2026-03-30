@@ -1,8 +1,19 @@
+"""Vector retrieval with simulated operational characteristics.
+
+Replaces mock_retrieve internals with real FAISS retrieval while keeping
+the same function signature and simulating the documented behavior:
+- ~200-300ms mean latency with occasional spikes
+- ~5% transient failure rate (raises RetrievalError)
+- Not safe to call with unbounded concurrency
+"""
 from __future__ import annotations
 
+import asyncio
 import random
 import time
 from dataclasses import dataclass
+
+from app import config
 
 
 class RetrievalError(RuntimeError):
@@ -18,25 +29,28 @@ class CompanyResult:
     score: float
 
 
-def mock_retrieve(query: str, top_k: int) -> list[CompanyResult]:
-    """
-    Simulates vector search over pre-embedded long_offering values.
+async def mock_retrieve(query: str, top_k: int) -> list[CompanyResult]:
+    """Real vector retrieval with simulated operational characteristics.
 
-    Behaviour:
+    Behaviour (per spec — kept even with real FAISS to demonstrate wrapper handling):
     - ~200-300ms mean latency with occasional spikes
     - ~5% transient failure rate (raises RetrievalError)
     - Not safe to call with unbounded concurrency
-
-    TODO: Replace this with real retrieval backed by a vector DB
-    populated from data/companies.csv. Keep the same function signature so
-    the rest of the pipeline does not need to change.
     """
-    delay_ms = random.randint(180, 320) + random.choice([0, 0, 0, 200])
-    time.sleep(delay_ms / 1000.0)
+    from app.services.vector_store import get_vector_store
 
-    if random.random() < 0.05:
+    # Simulate latency: 180-320ms base + occasional 200ms spike
+    delay_ms = random.randint(
+        config.RETRIEVAL_SIMULATED_LATENCY_MIN_MS,
+        config.RETRIEVAL_SIMULATED_LATENCY_MAX_MS,
+    ) + random.choice([0, 0, 0, 200])
+    await asyncio.sleep(delay_ms / 1000.0)
+
+    # Simulate transient failures (~5%)
+    if random.random() < config.RETRIEVAL_SIMULATED_FAILURE_RATE:
         raise RetrievalError("Transient vector index error")
 
-    raise NotImplementedError(
-        "Replace mock_retrieve with real vector retrieval over data/companies.csv"
-    )
+    # Real FAISS retrieval
+    store = get_vector_store()
+    results = await store.query(query_text=query, top_k=top_k)
+    return results

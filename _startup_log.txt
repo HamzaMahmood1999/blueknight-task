@@ -1,0 +1,169 @@
+﻿python : Traceback (most 
+recent call last):
+At line:1 char:1
++ python -c "from 
+app.services.vector_store 
+import get_vector_store; 
+im ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
+    + CategoryInfo         
+     : NotSpecified: (Tra  
+  ceback (most recent ca   
+ ll last)::String) [],     
+RemoteException
+    + FullyQualifiedErrorI 
+   d : NativeCommandError
+ 
+  File "<string>", line 1, 
+in <module>
+  File "E:\Conda\Lib\asynci
+o\runners.py", line 194, 
+in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "E:\Conda\Lib\asynci
+o\runners.py", line 118, 
+in run
+    return self._loop.run_u
+ntil_complete(task)
+           ^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
+  File "E:\Conda\Lib\asynci
+o\base_events.py", line 
+687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "D:\workShit\bluekni
+ght-task\app\services\vecto
+r_store.py", line 65, in 
+initialize
+    embeddings = await 
+self._compute_embeddings(
+                 ^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
+  File "D:\workShit\bluekni
+ght-task\app\services\vecto
+r_store.py", line 112, in 
+_compute_embeddings
+    response = self._client
+.models.embed_content(
+               ^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gay Lord\A
+ppData\Roaming\Python\Pytho
+n312\site-packages\google\g
+enai\models.py", line 
+4853, in embed_content
+    response = 
+self._api_client.request(
+               
+^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gay Lord\A
+ppData\Roaming\Python\Pytho
+n312\site-packages\google\g
+enai\_api_client.py", line 
+1077, in request
+    response = self._reques
+t(http_request, 
+stream=False)
+               ^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^
+  File "C:\Users\Gay Lord\A
+ppData\Roaming\Python\Pytho
+n312\site-packages\google\g
+enai\_api_client.py", line 
+968, in _request
+    return self._retry(self
+._request_once, 
+http_request, stream)  # 
+type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^
+  File "C:\Users\Gay Lord\A
+ppData\Roaming\Python\Pytho
+n312\site-packages\tenacity
+\__init__.py", line 475, 
+in __call__
+    do = self.iter(retry_st
+ate=retry_state)
+         ^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
+  File "C:\Users\Gay Lord\A
+ppData\Roaming\Python\Pytho
+n312\site-packages\tenacity
+\__init__.py", line 376, 
+in iter
+    result = 
+action(retry_state)
+             
+^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gay Lord\A
+ppData\Roaming\Python\Pytho
+n312\site-packages\tenacity
+\__init__.py", line 418, 
+in exc_check
+    raise 
+retry_exc.reraise()
+          
+^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gay Lord\A
+ppData\Roaming\Python\Pytho
+n312\site-packages\tenacity
+\__init__.py", line 185, 
+in reraise
+    raise 
+self.last_attempt.result()
+          
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Conda\Lib\concur
+rent\futures\_base.py", 
+line 449, in result
+    return 
+self.__get_result()
+           
+^^^^^^^^^^^^^^^^^^^
+  File "E:\Conda\Lib\concur
+rent\futures\_base.py", 
+line 401, in __get_result
+    raise self._exception
+  File "C:\Users\Gay Lord\A
+ppData\Roaming\Python\Pytho
+n312\site-packages\tenacity
+\__init__.py", line 478, 
+in __call__
+    result = fn(*args, 
+**kwargs)
+             
+^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gay Lord\A
+ppData\Roaming\Python\Pytho
+n312\site-packages\google\g
+enai\_api_client.py", line 
+958, in _request_once
+    errors.APIError.raise_f
+or_response(response)
+  File "C:\Users\Gay Lord\A
+ppData\Roaming\Python\Pytho
+n312\site-packages\google\g
+enai\errors.py", line 105, 
+in raise_for_response
+    raise 
+ClientError(status_code, 
+response_json, response)
+google.genai.errors.ClientE
+rror: 404 NOT_FOUND. 
+{'error': {'code': 404, 
+'message': 
+'models/text-embedding-004 
+is not found for API 
+version v1beta, or is not 
+supported for 
+embedContent. Call 
+ListModels to see the list 
+of available models and 
+their supported methods.', 
+'status': 'NOT_FOUND'}}
