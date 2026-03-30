@@ -303,12 +303,32 @@ logs alone
 
 ---
 
-## Deliverables
+## Assignment Deliverables
 
-- Working API for both subtasks
-- README covering:
-  - Assumptions made
-  - Termination condition rationale
-  - Production answer (Subtask 3)
-  - What you would do with more time
+### 1. Assumptions Made
+- **API Limits & Local Embeddings**: I assumed that we shouldn't be blocked by API rate limits (e.g., free tier limits failing to embed 1,000 bios). Therefore, I embedded the dataset locally using `SentenceTransformers` (`all-MiniLM-L6-v2`), which embeds entirely on CPU in ~30 seconds, and cached it to disk (FAISS + numpy).
+- **Fast Generation**: I assumed JSON output consistency is paramount, so I utilized Groq's API with `llama-3.3-70b-versatile` operating in strict `json_object` mode.
+- **Geography Overlap**: If the user doesn't specify geography, the requirement is assumed to be global (no geographic post-filters applied).
+
+### 2. Termination Condition Rationale
+The Refinement Agent loop terminates early (before `max_iterations`) if it detects that further prompting is unlikely to yield better results. This relies on 4 multi-signal heuristics evaluated on each turn:
+1. **Query Identity**: If the LLM produces the exact same `query_text`, `geography`, and `exclusions` as the previous turn, it has logically converged. It halts immediately.
+2. **Score Stability Threshold**: If the top-10 IDs returned by the search match 80%+ of the top-10 IDs from the previous iteration, the semantic neighborhood is stable. Further word-tweaks won't surface radically different companies.
+3. **Filter Drop Ratio**: If the number of results dropped during post-filtering (geography/exclusions) sits below 50% of the raw recalled results, the query constraints are well-aligned with the dataset distribution.
+4. **Score Quality Mean**: If the mean score of the top-10 candidates exceeds `0.55` (a mathematically strong cosine-similarity baseline post-reranker weights), the results are deemed factually "good enough" for the user.
+
+### 3. Subtask 3 - Production Readiness
+> *"The system serves 10,000 queries/day. Result relevance silently degrades - no errors are thrown, but users are getting poor matches. How would you detect this before users complain, and what is your first operational change?"*
+
+**Detection Strategies:**
+- **Zero-Click & Reformulation Rates**: I would instrument the platform to track when users run a query and either click *none* of the results or immediately re-type a slightly different query. A spike in the Query Reformulation Rate indicates silent relevance failure.
+- **Top-K Score Drift Monitoring**: The observability layer currently logs all component scores for each search. I would build a dashboard tracking the `p50` and `p90` final matching scores for the top-5 results of every query. If the rolling average top score decays over a week, the embedding space is drifting from the user search vocabulary.
+
+**First Operational Change:**
+- **Examine Logs & Adjust Reranking Weights**: I would pull the structured logs filtering for high reformulations. If users are searching for explicit hard-requirements (e.g., "SOC2 compliance") and dense vectors are retrieving semantically related but factually incorrect companies ("HIPAA compliant"), I would quickly intervene by increasing the `RERANK_WEIGHT_KEYWORD_BOOST` in the config. This instantly increases the penalty on lexical mismatches, restoring factual precision while the team investigates fine-tuning the core embedding model itself.
+
+### 4. What I Would Do With More Time
+- **Dedicated Vector DB**: Move from in-memory FAISS to a persistent vector database like Qdrant or Milvus to support real-time CRUD insertions of new M&A targets without needing to re-pickle an index array.
+- **Dense/Sparse Hybrid Search**: Upgrade the vector recall stage from pure dense embeddings to a Hybrid search architecture (Dense vectors + Sparse BM25/Splade). This inherently solves the lexical mismatch problem without needing a manual keyword-boost in the Python reranker.
+- **Async LLM Streaming**: Pipe the refinement agent's inner-thoughts and iteration progress back to the user via Server-Sent Events (SSE) so a Frontend UI could display *"Refining your search... Checking geographic constraints..."* rather than making the user wait 15 seconds for a bulk JSON response.
 
