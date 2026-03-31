@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic M&A Search</title>
+    <!-- Modern Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<div class="container">
+    <header class="header">
+        <h1>Agentic M&A Search</h1>
+        <p class="subtitle">Enter your natural language criteria and let the refinement agent find your ideal acquisition targets.</p>
+    </header>
+
+    <div class="search-panel glass-panel">
+        <div class="toggle-container">
+            <span class="toggle-label active" id="label-raw">Raw Search</span>
+            <label class="switch">
+                <input type="checkbox" id="mode-toggle" checked>
+                <span class="slider round"></span>
+            </label>
+            <span class="toggle-label" id="label-agent">Agent Search</span>
+        </div>
+
+        <form id="search-form">
+            <div class="input-group">
+                <input type="text" id="search-input" placeholder="e.g., 'SaaS for HR and payroll located in the US, but exclude any finance tracking modules...'" required autocomplete="off">
+                <button type="submit" id="search-btn">
+                    <span class="btn-text">Execute</span>
+                    <div class="loader hidden" id="btn-loader"></div>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Agent Logging Area (Visible only in Agent Mode) -->
+    <div class="agent-console hidden" id="agent-console">
+        <h3><span class="pulse"></span> Agent Reasoning Log</h3>
+        <div class="log-stream" id="log-stream">
+            <!-- Logs dynamically inserted here -->
+        </div>
+        <div class="final-rationale hidden" id="final-rationale"></div>
+    </div>
+
+    <!-- Results Area -->
+    <div class="results-header hidden" id="results-header">
+        <h2 id="results-count">Matches Found</h2>
+        <div class="badges" id="query-badges">
+            <!-- Badges dynamically inserted here -->
+        </div>
+    </div>
+
+    <div class="results-grid" id="results-grid">
+        <!-- Result Cards dynamically inserted here -->
+    </div>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
