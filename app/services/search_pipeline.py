@@ -38,6 +38,18 @@ class SearchPipeline:
         drop_reasons: dict[str, int] = {}
 
         # ── Stage 1: Vector Recall ─────────────────────────────────
+        if query.query_text == "REJECTED_GIBBERISH":
+            return SearchResponse(
+                results=[],
+                total=0,
+                diagnostics=Diagnostics(
+                    raw_count=0, filtered_count=0, reranked_count=0,
+                    drop_reasons={"gibberish_input_rejected": 1},
+                    stage_latency_ms={"vector_recall": 0, "post_filter": 0, "rerank": 0},
+                    trace_id=trace_id
+                )
+            )
+
         with timed_stage(trace_id, "vector_recall") as ctx:
             candidates = await retrieve_with_resilience(
                 query=query.query_text,

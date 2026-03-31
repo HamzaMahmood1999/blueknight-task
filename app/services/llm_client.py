@@ -33,6 +33,7 @@ Guidelines:
 - If no exclusions, leave exclusions as []
 - Expand abbreviations (UK -> United Kingdom, US -> United States)
 - For vague or short queries, produce a reasonable default interpretation
+- IMPORTANT: If the user's request is completely nonsensical gibberish (e.g., "adsdsdasda"), you MUST set `query_text` to exactly: "REJECTED_GIBBERISH"
 - If given previous results and diagnostics, refine the query to improve results
 
 Always respond with valid JSON only. No markdown, no explanation outside the JSON."""
