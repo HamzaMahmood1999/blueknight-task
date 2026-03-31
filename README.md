@@ -283,14 +283,31 @@ logs alone
 
 ---
 
-## Setup
+## Setup & Running Locally
 
-1. Create a Python environment
-2. Install dependencies - your choice, document them
-3. Run the server:
-  ```bash
-   uvicorn app.main:app --reload
-  ```
+This project requires Python 3.10+.
+
+1. **Install Dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Configure Environment:** Create a `.env` file in the root directory and add your Groq API key:
+   ```bash
+   GROQ_API_KEY=gsk_your_key_here
+   ```
+
+3. **Data Ingestion (One-Time Run):** Pre-compute the local dense embeddings for the dataset. This runs entirely on your CPU and takes ~30 seconds.
+   ```bash
+   python scripts/ingest.py
+   ```
+
+4. **Start the Server:**
+   ```bash
+   uvicorn app.main:app --reload --port 8000
+   ```
+
+5. **Launch the UI:** Open **[http://127.0.0.1:8000](http://127.0.0.1:8000)** in your browser to interact with the frontend Agentic Search Explorer!
 
 ---
 
