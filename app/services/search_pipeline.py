@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import time
+import re
 from typing import Any
 
 from app import config
@@ -123,7 +124,7 @@ class SearchPipeline:
             # Filter 1: Geography mismatch
             if geo_terms:
                 geo_match = any(
-                    geo in country_lower or geo in offering_lower
+                    re.search(rf"\b{re.escape(geo)}\b", country_lower)
                     for geo in geo_terms
                 )
                 if not geo_match:
@@ -135,7 +136,7 @@ class SearchPipeline:
             # Filter 2: Exclusion term present
             if not dropped and exclusion_terms:
                 for term in exclusion_terms:
-                    if term in offering_lower or term == country_lower or term in country_lower:
+                    if term in offering_lower or term in country_lower:
                         drop_reasons["exclude_term"] = (
                             drop_reasons.get("exclude_term", 0) + 1
                         )

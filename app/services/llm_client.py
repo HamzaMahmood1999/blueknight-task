@@ -29,6 +29,7 @@ Guidelines:
 - Extract geography signals (countries, regions) into the geography list
 - Extract exclusion/negative signals into the exclusions list
 - If the user says "not X" or "excluding X", put X in exclusions
+- If a geography is excluded (e.g. "not in the UK"), you MUST put it in `exclusions` ONLY, and do NOT put it in `geography`
 - If no geography is specified, leave geography as []
 - If no exclusions, leave exclusions as []
 - Expand abbreviations (UK -> United Kingdom, US -> United States)

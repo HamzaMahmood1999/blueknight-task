@@ -51,7 +51,7 @@ class Reranker:
             geo_boost = 0.0
             if geo_terms:
                 for geo in geo_terms:
-                    if geo in country_lower or geo in offering_lower:
+                    if re.search(rf"\b{re.escape(geo)}\b", country_lower):
                         geo_boost = 1.0
                         break
 
