@@ -135,7 +135,7 @@ class SearchPipeline:
             # Filter 2: Exclusion term present
             if not dropped and exclusion_terms:
                 for term in exclusion_terms:
-                    if term in offering_lower:
+                    if term in offering_lower or term == country_lower or term in country_lower:
                         drop_reasons["exclude_term"] = (
                             drop_reasons.get("exclude_term", 0) + 1
                         )

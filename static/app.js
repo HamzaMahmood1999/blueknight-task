@@ -18,6 +18,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const queryBadges = document.getElementById('query-badges');
     const resultsGrid = document.getElementById('results-grid');
 
+    // Modal elements
+    const modal = document.getElementById('company-modal');
+    const closeModalBtn = document.getElementById('close-modal');
+    const modalName = document.getElementById('modal-company-name');
+    const modalCountry = document.getElementById('modal-company-country');
+    const modalBio = document.getElementById('modal-company-bio');
+
+    let currentResults = [];
+
+    // Modal Close Logic
+    closeModalBtn.addEventListener('click', () => modal.classList.add('hidden'));
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.add('hidden');
+    });
+
+    // Card Click Delegate
+    resultsGrid.addEventListener('click', (e) => {
+        const card = e.target.closest('.company-card');
+        if (card) {
+            const index = card.getAttribute('data-index');
+            const company = currentResults[index];
+            if (company) {
+                modalName.textContent = company.company_name;
+                modalCountry.textContent = company.country || 'Global';
+                modalBio.textContent = company.long_offering;
+                modal.classList.remove('hidden');
+            }
+        }
+    });
+
     // Toggle Mode Logic
     modeToggle.addEventListener('change', (e) => {
         if (e.target.checked) {
@@ -87,14 +117,15 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsCount.textContent = `${data.total || data.results.length} Matches Found`;
         renderBadges(queryPayload);
         resultsHeader.classList.remove('hidden');
+        currentResults = data.results;
 
         if (data.results.length === 0) {
             resultsGrid.innerHTML = `<p style="color: #94a3b8; grid-column: 1/-1;">No companies met the criteria.</p>`;
             return;
         }
 
-        resultsGrid.innerHTML = data.results.map(r => `
-            <div class="company-card">
+        resultsGrid.innerHTML = data.results.map((r, i) => `
+            <div class="company-card" data-index="${i}">
                 <div class="card-header">
                     <div>
                         <div class="company-name">${r.company_name}</div>
